@@ -29,7 +29,7 @@ harness: libpng
 
 [unix]
 run: harness build
-    {{ FUZZER }} \
+    LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libasan.so.8 {{ FUZZER }} \
         --output ./output \
         --input ./corpus \
         --verbose \
