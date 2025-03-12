@@ -4,7 +4,6 @@ use core::mem::size_of;
 #[cfg(feature = "snapshot")]
 use core::time::Duration;
 use std::{env, fmt::Write, io, path::PathBuf, process, ptr::NonNull};
-use std::mem::forget;
 
 use clap::{builder::Str, Parser};
 use libafl::{
@@ -323,10 +322,6 @@ pub fn fuzz() -> Result<(), Error> {
         files.len() - size,
         files.len()
     );
-
-
-    forget(state);
-
 
     mgr.send_exiting()?;
     Ok(())
