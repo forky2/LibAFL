@@ -7,7 +7,7 @@ use std::{env, fmt::Write, io, path::PathBuf, process, ptr::NonNull};
 
 use clap::{builder::Str, Parser};
 use libafl::{
-    corpus::{Corpus, InMemoryOnDiskCorpus, NopCorpus},
+    corpus::{Corpus, InMemoryCorpus, NopCorpus},
     events::{SendExiting, SimpleRestartingEventManager},
     executors::ExitKind,
     feedbacks::MaxMapFeedback,
@@ -203,7 +203,7 @@ pub fn fuzz() -> Result<(), Error> {
     let mut state = state.unwrap_or_else(|| {
         StdState::new(
             StdRand::new(),
-            InMemoryOnDiskCorpus::new(PathBuf::from(options.output)).unwrap(),
+            InMemoryCorpus::new(),
             NopCorpus::new(),
             &mut feedback,
             &mut objective,
