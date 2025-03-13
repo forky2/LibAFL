@@ -227,5 +227,7 @@ COPY fuzzers fuzzers
 
 # RUN ./scripts/test_fuzzer.sh --no-fmt
 
+RUN apt-get install -y valgrind
+
 ENTRYPOINT [ "/bin/bash", "-c" ]
 CMD ["/bin/bash"]

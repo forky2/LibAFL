@@ -257,6 +257,16 @@ pub fn fuzz() -> Result<(), Error> {
                 buf = &buf[0..MAX_INPUT_SIZE];
                 len = MAX_INPUT_SIZE;
             }
+
+            println!("buf addr {:p}", buf);
+            // Addison's unsafe write to immutable buffer
+            // unsafe {
+            //     let ptr = buf.as_ptr() as *mut u8;
+            //     *(ptr.wrapping_add(0)) = 0x89;
+            // }
+            println!("buf addr {:p}", buf);
+            log::debug!("Input buffer length: {len}");
+            
             let len = len as GuestReg;
 
             unsafe {
