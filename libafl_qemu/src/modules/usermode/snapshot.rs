@@ -765,10 +765,13 @@ impl SnapshotModule {
         for entry in new_maps.tree.query(0..GuestAddr::MAX) {
             to_unmap.push((*entry.interval, entry.value.changed, entry.value.perms));
         }
+        println!("RESET MAPS START");
         for (i, ..) in to_unmap {
+            println!("    unmap(start: {:x}, end {:x})", i.start, i.end);
             qemu.unmap(i.start, (i.end - i.start) as usize).unwrap();
             new_maps.tree.delete(i);
         }
+        println!("RESET MAPS END");
 
         new_maps.tree.clear();
         new_maps.tree = self.maps.tree.clone();

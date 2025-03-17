@@ -26,7 +26,21 @@ impl<T> From<T> for ValueInput<T> {
     }
 }
 
-impl<T> ValueInput<T> {
+impl<T> Drop for ValueInput<T> {
+    fn drop(&mut self) {
+        println!("DROP for {}", std::any::type_name::<T>());
+        unsafe {
+            let p = &self.0 as *const T;
+            let v = p as *const Vec<u8>;
+            let buf = (*v).as_slice().as_ptr();
+            println!("    Buf: {buf:p}");
+            println!("    v: {v:p}");
+            println!("    len: {}", (*v).len());
+        }
+    }
+}
+
+impl<T: Clone> ValueInput<T> {
     /// Create a new [`ValueInput`]
     pub const fn new(value: T) -> Self {
         Self(value)
@@ -34,7 +48,7 @@ impl<T> ValueInput<T> {
 
     /// Extract the inner value
     pub fn into_inner(self) -> T {
-        self.0
+        self.0.clone()
     }
 }
 
@@ -50,7 +64,7 @@ impl<T> AsMut<T> for ValueInput<T> {
     }
 }
 
-impl<T: Copy> Copy for ValueInput<T> {}
+// impl<T: Copy> Copy for ValueInput<T> {}
 
 // Macro to implement the `Input` trait and create type aliases for `WrappingInput<T>`
 macro_rules! impl_input_for_value_input {
